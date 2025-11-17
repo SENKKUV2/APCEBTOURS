@@ -257,7 +257,7 @@ What else would you like to know about this amazing experience?`,
     };
 
     const getAIResponse = async (userMessageText, conversationHistory) => {
-        const apiKey = "AIzaSyBl_OV_7upAcm1FBlj4CHJe7QVocNlNJf0"; // Use env variable in production
+        const apiKey = "AIzaSyBxeoMdnp5oENfwNdq1O8zlk8haEbTNQqA"; // Use env variable in production
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
         const userName = user?.full_name || "the user";

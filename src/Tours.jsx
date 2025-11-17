@@ -1289,16 +1289,16 @@ const TourDetailsModal = ({
         {/* Image Gallery Section */}
         <div>
           {/* Main Image with Loading State */}
-          <div className="relative mb-6 group">
+          <div className="relative mb-4 group">
             <div
-              className={`relative overflow-hidden rounded-xl shadow-lg transition-all duration-500 ${
+              className={`relative overflow-hidden rounded-2xl shadow-2xl transition-all duration-500 ${
                 imageLoading ? "opacity-60" : "opacity-100"
               }`}
             >
               <img
                 src={activeImage}
                 alt={tour.title}
-                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-102"
+                className="w-full h-96 object-cover transition-transform duration-700 group-hover:scale-105"
                 onError={(e) => {
                   console.warn(
                     `Modal image failed to load for tour: ${tour.title}, using fallback`
@@ -1309,31 +1309,31 @@ const TourDetailsModal = ({
                 onLoad={handleImageLoad}
               />
               {imageLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
+                <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm">
                   <div
-                    className="animate-spin rounded-full h-10 w-10 border-t-2"
-                    style={{ borderColor: "#00355f" }}
+                    className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent"
+                    style={{ borderColor: "#00355f", borderTopColor: "transparent" }}
                   ></div>
                 </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
               {/* Availability Badge */}
               <div className="absolute top-4 right-4">
                 <span
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium shadow-md ${
+                  className={`px-4 py-2 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm ${
                     tour.available
-                      ? "bg-green-500 text-white"
-                      : "bg-red-500 text-white"
+                      ? "bg-[#eec218]/95 text-[#00355f]"
+                      : "bg-gray-400/95 text-white"
                   }`}
                 >
-                  {tour.available ? "Available" : "Unavailable"}
+                  {tour.available ? "✓ Available" : "✕ Unavailable"}
                 </span>
               </div>
 
               {/* Capacity Badge */}
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-md border border-gray-100/50">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white/50">
+                <div className="flex items-center gap-2 text-sm font-medium" style={{ color: "#00355f" }}>
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -1347,7 +1347,17 @@ const TourDetailsModal = ({
                       d="M17 20h5v-3a3 3 0 00-3-3h-1m-2-3a3 3 0 11-6 0m0 0a3 3 0 00-3 3v3h5"
                     />
                   </svg>
-                  <span>Max: {tour.max_capacity || 20}</span>
+                  <span>Max: {tour.max_capacity || 20} guests</span>
+                </div>
+              </div>
+
+              {/* Rating Badge */}
+              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white/50">
+                <div className="flex items-center gap-1.5 text-sm font-medium" style={{ color: "#00355f" }}>
+                  <svg className="w-4 h-4 text-[#eec218] fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <span>{tour.rating || 4.5}</span>
                 </div>
               </div>
             </div>
@@ -1355,42 +1365,54 @@ const TourDetailsModal = ({
 
           {/* Thumbnail Gallery */}
           {tour.sub_images?.length > 0 && (
-            <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
-              {/* Main image thumbnail */}
-              <div className="flex-shrink-0">
-                <img
-                  src={tour.image}
-                  alt="Main"
-                  className={`w-16 h-16 object-cover rounded-lg shadow-sm cursor-pointer transition-all duration-300 hover:scale-105 border-2 ${
-                    activeImage === tour.image
-                      ? "border-[#eec218] shadow-md"
-                      : "border-transparent hover:border-gray-300/50"
-                  }`}
-                  onClick={() => handleSubImageClick(tour.image)}
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/80?text=Main";
-                  }}
-                />
-              </div>
-
-              {/* Sub-image thumbnails */}
-              {tour.sub_images.map((img, i) => (
-                <div key={i} className="flex-shrink-0">
-                  <img
-                    src={img || "https://via.placeholder.com/80?text=Image"}
-                    alt={`Gallery ${i + 1}`}
-                    className={`w-16 h-16 object-cover rounded-lg shadow-sm cursor-pointer transition-all duration-300 hover:scale-105 border-2 ${
-                      activeImage === img
-                        ? "border-[#eec218] shadow-md"
-                        : "border-transparent hover:border-gray-300/50"
-                    }`}
-                    onClick={() => handleSubImageClick(img)}
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/80?text=Error";
-                    }}
-                  />
+            <div className="relative">
+              <div className="flex overflow-x-auto gap-3 pb-3 px-1 scrollbar-thin scrollbar-thumb-[#00355f]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#00355f]/50">
+                {/* Main image thumbnail */}
+                <div className="flex-shrink-0">
+                  <div className="relative group/thumb">
+                    <img
+                      src={tour.image}
+                      alt="Main"
+                      className={`w-20 h-20 object-cover rounded-xl shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl ${
+                        activeImage === tour.image
+                          ? "ring-3 ring-[#eec218] scale-105"
+                          : "hover:scale-105 ring-2 ring-transparent hover:ring-[#00355f]/30"
+                      }`}
+                      onClick={() => handleSubImageClick(tour.image)}
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/80?text=Main";
+                      }}
+                    />
+                    {activeImage === tour.image && (
+                      <div className="absolute inset-0 bg-[#eec218]/20 rounded-xl pointer-events-none"></div>
+                    )}
+                  </div>
                 </div>
-              ))}
+
+                {/* Sub-image thumbnails */}
+                {tour.sub_images.map((img, i) => (
+                  <div key={i} className="flex-shrink-0">
+                    <div className="relative group/thumb">
+                      <img
+                        src={img || "https://via.placeholder.com/80?text=Image"}
+                        alt={`Gallery ${i + 1}`}
+                        className={`w-20 h-20 object-cover rounded-xl shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl ${
+                          activeImage === img
+                            ? "ring-3 ring-[#eec218] scale-105"
+                            : "hover:scale-105 ring-2 ring-transparent hover:ring-[#00355f]/30"
+                        }`}
+                        onClick={() => handleSubImageClick(img)}
+                        onError={(e) => {
+                          e.target.src = "https://via.placeholder.com/80?text=Error";
+                        }}
+                      />
+                      {activeImage === img && (
+                        <div className="absolute inset-0 bg-[#eec218]/20 rounded-xl pointer-events-none"></div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
